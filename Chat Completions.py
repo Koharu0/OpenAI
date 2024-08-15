@@ -1,3 +1,4 @@
+import shutil
 from openai import OpenAI
 
 client = OpenAI()
@@ -20,12 +21,15 @@ def Chat():
         )
 
         response_content = ""
+        print("Assistant: ", end="")
         for chunk in stream:
             if chunk.choices[0].delta.content is not None:
                 print(chunk.choices[0].delta.content, end="")
                 response_content += chunk.choices[0].delta.content
         
-        print()
+        terminal_width = shutil.get_terminal_size().columns
+        print("\n" + "-" * terminal_width)
+        
         conversation_history.append({"role": "assistant", "content": response_content})
 
 if __name__ == "__main__":
